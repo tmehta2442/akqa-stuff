@@ -16,15 +16,15 @@ var connect = require('gulp-connect');
 
 gulp.task('default', ['imagemin', 'htmlpage', 'scripts', 'styles', 'webserver'], function() {
 	gulp.watch('./src/*.html', function() {
-		gulp.run('htmlpage');
+		gulp.start('htmlpage');
 		});
 
 	gulp.watch('./src/scripts/*.js', function() {
-		gulp.run('jshint', 'scripts');
+		gulp.start('jshint', 'scripts');
 	});
 
 	gulp.watch('./src/styles/*.css', function() {
-		gulp.run('styles');
+		gulp.start('styles');
 	});
 });
 
