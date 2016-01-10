@@ -9,12 +9,13 @@ var stripDebug = require('gulp-strip-debug');
 var uglify = require('gulp-uglify');
 var autoprefix = require('gulp-autoprefixer');
 var minifyCSS = require('gulp-minify-css');
+var sass = require('gulp-sass');
 var connect = require('gulp-connect');
 
-// gulp.task('default', ['imagemin', 'htmlpage', 'scripts', 'styles'], function() {
+// gulp.task('default', ['jshint', 'imagemin', 'htmlpage', 'scripts', 'styles', 'sass', 'webserver'], function() {
 // });
 
-gulp.task('default', ['imagemin', 'htmlpage', 'scripts', 'styles', 'webserver'], function() {
+gulp.task('default', ['jshint', 'imagemin', 'htmlpage', 'scripts', 'styles', 'sass', 'webserver'], function() {
 	gulp.watch('./src/*.html', function() {
 		gulp.start('htmlpage');
 		});
@@ -23,8 +24,8 @@ gulp.task('default', ['imagemin', 'htmlpage', 'scripts', 'styles', 'webserver'],
 		gulp.start('jshint', 'scripts');
 	});
 
-	gulp.watch('./src/styles/*.css', function() {
-		gulp.start('styles');
+	gulp.watch('./src/styles/*.scss', function() {
+		gulp.start('styles', 'sass');
 	});
 });
 
@@ -66,8 +67,18 @@ gulp.task('styles', function() {
 	gulp.src(['./src/styles/*.css'])
 		.pipe(concat('styles.css'))
 		.pipe(autoprefix('last 2 versions'))
-		.pipe(minifyCSS())
 		.pipe(gulp.dest('./build/styles/'));
+});
+
+var input = './src/styles/*.scss';
+var output = './build/styles';
+
+gulp.task('sass', function () {
+  return gulp
+    .src(input)
+    .pipe(sass())
+    .pipe(minifyCSS())
+    .pipe(gulp.dest(output));
 });
 
 gulp.task('webserver', function() {
